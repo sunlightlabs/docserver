@@ -1,8 +1,8 @@
 from django.core.management.base import NoArgsCommand
-import feedparser
-import datetime, time
 from docserver.public_site.models import Document
-import urllib2
+from scrape_utils import *
+import datetime, time
+import feedparser
 
 def split_title(title):
     title_arr_small = title.split(',', 1)
@@ -15,6 +15,7 @@ def split_title(title):
 class Command(NoArgsCommand):
     
     def handle_noargs(self, **options):
+        doc_type = "GAO"
         d = feedparser.parse("http://www.gao.gov/rss/reports.xml")
         
         for entry in d.entries:
@@ -25,7 +26,6 @@ class Command(NoArgsCommand):
             add_date = datetime.datetime.now()
             title = title_dict['title']
             description = entry.description
-            doc_type = "GAO"
             original_url = entry.link
             local_file = ""
     
@@ -33,14 +33,8 @@ class Command(NoArgsCommand):
             if len(matches) > 0:
                 pass
             else:
-                #try:
-                file_name = "/var/www/data/docserver/gao/%s.pdf" % gov_id
-                remote_file = urllib2.urlopen(original_url)
-                local_file = open(file_name, "w")
-                local_file.write(remote_file.read())
-                local_file.close
-                print gov_id
-                #except:
-                #print "nope"
-                doc = Document(gov_id=gov_id, release_date=release_date, add_date=add_date, title=title, description=description, doc_type=doc_type, original_url=original_url, local_file=local_file)
-                doc.save()
+                if gov_id != None:
+                    archive_file(original_url, gov_id, doc_type, file_type)
+                    doc = Document(gov_id=gov_id, release_date=release_date, add_date=add_date, title=title, 
+                        description=description, doc_type=doc_type, original_url=original_url, local_file=local_file)
+                    doc.save()

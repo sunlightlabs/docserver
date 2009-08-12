@@ -1,44 +1,30 @@
+from congress_utils import *
 from django.core.management.base import NoArgsCommand
-import datetime, time
-import urllib2
-from BeautifulSoup import BeautifulSoup
 from docserver.public_site.models import Document, DocumentLegislation
-import re
+from scrape_utils import *
+import datetime, time
+import feedparser
+import urllib2
+
+def split_title(title):
+    title_arr = title.split(',', 1)
+    title_dict = {"gov_id":title_arr[0], "title":title.strip()}
+    return title_dict
 
 class Command(NoArgsCommand):
     
     def handle_noargs(self, **options):
-        
-        # return list of bill numbers extracted from string
-        def extract_legislation(haystack):
-            haystack = haystack.upper()
-            p = re.compile('S\.\s?CON\.\s?RES\.\s?\d{1,5}|H\.\s?CON\s?RES\.\s?\d{1,5}|S\.\s?J\.\s?RES\.\s\d{1,5}|H\.\s?J\.\s?RES\.\s\d{1,5}|S\.\s?RES\.\s?\d{1,5}|H\.\s?RES\.\s?\d{1,5}|H\.\s?\R\.\s?\d{1,5}|S\.\s?\d{1,5}')
-            needle_list = p.findall(haystack)
-            return needle_list
-            
-        #returns number of Congress in session for provided year
-        def congress_from_year(year):
-            if year < 1789:
-                return None
-            else:
-                return int((year-1789)/2) + 1
-        
-        add_date = datetime.datetime.now()
         doc_type = "CBO CE"
-        url_prefix = "http://cbo.gov"
-        page = urllib2.urlopen("%s/search/ce_sitesearch.cfm" % url_prefix)
-        soup = BeautifulSoup(page)
-        items = soup('div', {'id':'res', 'class':'searchresults'})[0].findAll('p')
-        for item in items:
-            remote_file_name = item('a')[0]['href']
-            original_url = "%s%s" % (url_prefix, remote_file_name)
-            local_file = ''
-            title = item('a')[0].string
-            description = ''
-            date_str = item.contents[2]
-            release_date = time.strftime('%Y-%m-%d', time.strptime(date_str, '%B %d, %Y'))
-            release_year = time.strptime(date_str, '%B %d, %Y')[0]
-            congress = congress_from_year(release_year)
+        file_type = "pdf"
+        d = feedparser.parse("http://www.cbo.gov/rss/costestimates.xml")
+        
+        for entry in d.entries:
+            title_dict = split_title(entry.title)
+            release_date = entry.updated_parsed
+            release_date=datetime.datetime(release_date[0], release_date[1], release_date[2])            
+            congress = congress_from_year(release_date.year)
+            add_date = datetime.datetime.now()
+            title = title_dict['title']
             bill_list = extract_legislation(title)
             if len(bill_list) > 0:
                 bill_num = bill_list[0]
@@ -46,25 +32,21 @@ class Command(NoArgsCommand):
             else:
                 bill_num = None
                 gov_id = None
-                              
+            if 'description' in entry:
+                description = entry.description
+            original_url = entry.link
+
             matches = Document.objects.filter(doc_type=doc_type, gov_id=gov_id, release_date=release_date)
             if len(matches) > 0:
                 pass
             else:
                 if gov_id != None:
-                    try:
-                        file_name = "/var/www/data/docserver/cbo/%s.pdf" % gov_id
-                        remote_file = urllib2.urlopen(original_url)
-                        local_file = open(file_name, "w")
-                        local_file.write(remote_file.read())
-                        local_file.close
-                    except:
-                        print "nope"
+                    local_file = archive_file(original_url, gov_id, doc_type, file_type)
                     doc = Document(gov_id=gov_id, release_date=release_date, add_date=add_date, title=title, 
                         description=description, doc_type=doc_type, original_url=original_url, local_file=local_file)
                     doc.save()
-    
-                    for bill in bill_list:
-                        bill_num = bill.replace(' ', '')
-                        bill = DocumentLegislation(congress=congress, bill_num=bill_num, document=doc)
-                        bill.save()
+            
+                for bill in bill_list:
+                    bill_num = bill.replace(' ', '')
+                    bill = DocumentLegislation(congress=congress, bill_num=bill_num, document=doc)
+                    bill.save()
