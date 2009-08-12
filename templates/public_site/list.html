@@ -1,0 +1,25 @@
+{% extends "public_site/base.html" %}
+{% load doc_extras %}
+{% block content %}
+	<h2>{{ title }}</h2>
+	{% if document_list %}
+		{% generic_paginator page_obj paginator %}
+		<ul class="doc_list">
+		{% for document in document_list %}
+		<li>
+			<div class="doc_meta">{{ document.doc_type }}, {{ document.release_date|date:"m/d/Y" }}</div>
+			<div><a href="{{ document.original_url }}">{{ document.title }}</a></div>
+			<ul class="bill_tags">
+			{% for bill in document.documentlegislation_set.all  %}
+				<li><a href="/bill/{{ bill.structured_bill.congress }}-{{ bill.structured_bill.bill_type }}-{{ bill.structured_bill.num }}/">{{ bill.bill_num }}</a></li>
+			{% endfor %}
+			</ul>
+		</li>
+		{% endfor %}
+		</ul>
+		{% generic_paginator page_obj paginator %}
+		<a href="list.xml?page={{ page_obj.number }}">XML</a>
+		<a href="list.json?page={{ page_obj.number }}">JSON</a>
+	{% endif %}
+{% endblock %}
+ 

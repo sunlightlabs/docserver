@@ -1,0 +1,25 @@
+{% load doc_extras %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+	<head>
+		<title>docserver.org</title>
+		<link rel="stylesheet" href="http://assets.docserver.org/v1/css/styles.css" type="text/css" media="screen" />
+	</head>
+	<body>
+		<div id="header">
+			<div id="headmain">
+				<div id="left">
+					<div id="title"><a href="/">docserver.org</a></span></div>
+					<div id="titlesub2">legislative document ecosystem</div>
+				</div>
+				<div id="right">
+					{% search_box "transparency" %}
+				</div>
+			</div>
+		</div>
+		<div id="headerborder"></div>
+		<div id="main">
+			{% block content %}{% endblock %}
+		</div>
+	</body>
+</html>

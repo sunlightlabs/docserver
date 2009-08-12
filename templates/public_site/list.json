@@ -1,0 +1,25 @@
+[
+	{
+		"title":"{{ title }}",
+		"page_num":"{{ page_obj.number }}",
+		"max_pages":"{{ paginator.num_pages }}",
+		"doc_list": [
+		{% for document in document_list %}
+			{
+				"document_type":"{{ document.doc_type }}",
+				"title":"{{ document.title }}", 
+				"release_date":"{{ document.release_date }}", 
+				"original_url":"{{ document.original_url }}", 
+				"archive_url":"{{ archive_url }}", 
+				"legislation": [
+					{% for bill in document.documentlegislation_set.all %} 
+					{ 
+						"congress":"{{ bill.congress}}", "bill_num":"{{ bill.bill_num}}"
+					}{% if not forloop.last %},{% endif %}
+					{% endfor %}
+				]
+			}{% if not forloop.last %},{% endif %}
+		{% endfor %}
+		]
+	}
+]
