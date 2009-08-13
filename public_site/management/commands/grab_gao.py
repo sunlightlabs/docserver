@@ -16,6 +16,7 @@ class Command(NoArgsCommand):
     
     def handle_noargs(self, **options):
         doc_type = "GAO"
+        file_type = "pdf"
         d = feedparser.parse("http://www.gao.gov/rss/reports.xml")
         
         for entry in d.entries:
@@ -30,11 +31,11 @@ class Command(NoArgsCommand):
             local_file = ""
     
             matches = Document.objects.filter(doc_type=doc_type, gov_id=gov_id, release_date=release_date)
-            if len(matches) > 0:
-                pass
-            else:
-                if gov_id != None:
-                    archive_file(original_url, gov_id, doc_type, file_type)
+            if len(matches) == 0:
+                if gov_id:
+                    local_file = archive_file(original_url, gov_id, doc_type, file_type)
+                    full_text = pdf_extract_text(local_file, original_url)
                     doc = Document(gov_id=gov_id, release_date=release_date, add_date=add_date, title=title, 
-                        description=description, doc_type=doc_type, original_url=original_url, local_file=local_file)
+                        description=description, doc_type=doc_type, original_url=original_url, 
+                        local_file=local_file, full_text=full_text)
                     doc.save()

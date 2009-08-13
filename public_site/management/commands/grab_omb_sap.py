@@ -45,7 +45,10 @@ class Command(NoArgsCommand):
                 if len(matches) == 0:
                     if gov_id:
                         local_file = archive_file(original_url, gov_id, doc_type, file_type)
-                        doc = Document(gov_id=gov_id, release_date=release_date, add_date=add_date, title=title, description=description, doc_type=doc_type, original_url=original_url, local_file=local_file)
+                        full_text = pdf_extract_text(local_file, original_url)
+                        doc = Document(gov_id=gov_id, release_date=release_date, add_date=add_date, title=title, 
+                            description=description, doc_type=doc_type, original_url=original_url, 
+                            local_file=local_file, full_text=full_text)
                         doc.save()
                         for bill in bill_list:
                             bill_num = bill.replace(' ', '')
