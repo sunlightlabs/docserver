@@ -1,7 +1,9 @@
+from BeautifulSoup import BeautifulSoup, SoupStrainer
+from docserver.public_site.models import Document, DocumentLegislation
 from django.core.management.base import NoArgsCommand
-import feedparser
+from scrape_utils import *
 import datetime, time
-from docserver.public_site.models import Document
+import feedparser
 import urllib2
 
 def split_title(title):
@@ -12,6 +14,9 @@ def split_title(title):
 class Command(NoArgsCommand):
     
     def handle_noargs(self, **options):
+        doc_type = "OMB Memo"
+        file_type = "pdf"
+        add_date = datetime.datetime.now()
         d = feedparser.parse("http://www.whitehouse.gov/omb/assets/rss/ombmemos.xml")
         
         for entry in d.entries:
@@ -19,25 +24,13 @@ class Command(NoArgsCommand):
             gov_id = title_dict['gov_id']
             release_date = entry.updated_parsed
             release_date=datetime.datetime(release_date[0], release_date[1], release_date[2])
-            add_date = datetime.datetime.now()
             title = title_dict['title']
             description = entry.description
-            doc_type = "OMB Memo"
             original_url = entry.link
-            local_file = ""
     
             matches = Document.objects.filter(doc_type=doc_type, gov_id=gov_id, release_date=release_date)
-            if len(matches) > 0:
-                pass
-            else:
-                if gov_id != None:
-                    try:
-                        file_name = "/var/www/data/docserver/omb_memo/%s.pdf" % gov_id
-                        remote_file = urllib2.urlopen(original_url)
-                        local_file = open(file_name, "w")
-                        local_file.write(remote_file.read())
-                        local_file.close
-                    except:
-                        print "nope"
+            if len(matches) == 0:
+                if gov_id:
+                    local_file = archive_file(original_url, gov_id, doc_type, file_type)
                     doc = Document(gov_id=gov_id, release_date=release_date, add_date=add_date, title=title, description=description, doc_type=doc_type, original_url=original_url, local_file=local_file)
                     doc.save()

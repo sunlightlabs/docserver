@@ -36,19 +36,13 @@ class Command(NoArgsCommand):
                 congress = congress_from_year(year)
                 title = description
                 bill_list = extract_legislation(title)
-                description = ""
-                local_file = ""
   
                 matches = Document.objects.filter(doc_type=doc_type, gov_id=gov_id, release_date=release_date)
-                if len(matches) > 0:
-                    pass
-                else:
-                    if gov_id != None:
+                if len(matches) == 0:
+                    if gov_id:
                         local_file = archive_file(original_url, gov_id, doc_type, file_type)
-                        doc = Document(gov_id=gov_id, release_date=release_date, add_date=add_date, title=title, 
-                            description=description, doc_type=doc_type, original_url=original_url, local_file=local_file)
+                        doc = Document(gov_id=gov_id, release_date=release_date, add_date=add_date, title=title, description=description, doc_type=doc_type, original_url=original_url, local_file=local_file)
                         doc.save()
-    
                         for bill in bill_list:
                             bill_num = bill.replace(' ', '')
                             bill = DocumentLegislation(congress=congress, bill_num=bill_num, document=doc)

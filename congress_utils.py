@@ -13,3 +13,7 @@ def congress_from_year(year):
         return None
     else:
         return int((year-1789)/2) + 1
+               
+#returns session number of Congress for a provided year        
+def session_from_year(year):
+    return 2 - (year % 2)
