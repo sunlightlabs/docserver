@@ -12,7 +12,7 @@ class Command(NoArgsCommand):
         doc_type = "RCR SRP"
         file_type = "html"
         base_url = 'http://repcloakroom.house.gov/news/'
-        page = urllib2.urlopen("http://repcloakroom.house.gov/news/DocumentQuery.aspx?DocumentTypeID=1501&Page=2")
+        page = urllib2.urlopen("http://repcloakroom.house.gov/news/DocumentQuery.aspx?DocumentTypeID=1501&Page=4")
         add_date = datetime.datetime.now()
         
         soup = BeautifulSoup(page)
@@ -26,11 +26,13 @@ class Command(NoArgsCommand):
                 year = int(time.strftime('%Y', time.strptime(date_str, '%b %d, %Y')))
                 congress = congress_from_year(year)
                 description = unicode(row.find('span', { "class":"middleheadline" }).parent.contents[6]).strip()
+                if not bill_list:
+                    bill_list = extract_legislation(description)
                 if title == "":
                     title = "".join(bill_list)
                 file_name = row.find('span', { "class":"middleheadline" }).parent.contents[7]['href']
                 original_url = "%s%s" % (base_url, file_name)
-                gov_id = "SRP-%s-%s-%s" % (congress, bill_list[0], release_date)
+                gov_id = "SRP-%s-%s-%s" % (congress, bill_list[0].replace(' ', '').replace('.', ''), release_date)
         
                 matches = Document.objects.filter(doc_type=doc_type, gov_id=gov_id, release_date=release_date)
                 if len(matches) == 0:
