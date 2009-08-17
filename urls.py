@@ -19,6 +19,7 @@ urlpatterns = patterns('',
     (r'^search/$', 'public_site.views.search'),
     (r'^timeline/(?P<congress>\d+)-(?P<bill_type>\w+)-(?P<bill_id>\d+)/$', 'public_site.views.timeline'),
     (r'^bill/(?P<congress>\d+)-(?P<bill_type>\w+)-(?P<bill_id>\d+)/$', 'public_site.views.bill'),
-    (r'^(?P<doc_type>\w+)/$', 'public_site.views.typelist', {'format':'html'}),
+    (r'^bill/(?P<congress>\d+)-(?P<bill_type>\w+)-(?P<bill_id>\d+)/list.(?P<format>\w+)$', 'public_site.views.bill'),
+    (r'^(?P<doc_type>\w+)/$', 'public_site.views.typelist'),
     (r'^(?P<doc_type>\w+)/list.(?P<format>\w+)$', 'public_site.views.typelist'),
 )

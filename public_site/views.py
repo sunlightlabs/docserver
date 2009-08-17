@@ -5,7 +5,6 @@ from docserver.public_site.models import Document, DocumentLegislation, Vote, Ac
 from django.db.models import Count
 from django.views.generic import list_detail
 import mimetypes
-import pprint
 import re
 
 FRIENDLY_MAP = {'hr':'H.R.', 'hres':'H.RES.', 's':'S.', 'sres':'S.R.', 'hconres':'H.CON.RES.', 
@@ -28,8 +27,6 @@ def index(request):
     docs =  Document.objects.all().order_by('-release_date')[:20]
     recent = DocumentLegislation.objects.top_recent(90, 30)
     new_recent = DocumentLegislation.objects.aggregate(doc_count=Count('document', distinct=True))
-    for nr in new_recent:
-        print nr
     link_list = []
     for k in TYPE_NAME_MAP:
         link_list.append((k, TYPE_NAME_MAP[k]))
@@ -85,14 +82,17 @@ def timeline(request, congress, bill_type, bill_id):
         {'bill_num':bill_num, 'congress':congress, 'timeline':timeline_list})
     
 
-def bill(request, congress, bill_type, bill_id):
+def bill(request, congress, bill_type, bill_id, format='html'):
     bill_num = "%s%s" % (FRIENDLY_MAP[bill_type], bill_id)
     results = Document.objects.filter(documentlegislation__congress=congress).filter(documentlegislation__bill_num=bill_num).order_by('-release_date')
-    print len(results)
-    return render_to_response('public_site/bill.html', {'results':results, 'bill':{'bill_num':bill_num, 'congress':congress}})
+    template_name = 'public_site/list.%s' % format
+    file_type = mimetypes.guess_type(template_name)[0]
+    #return render_to_response('public_site/bill.html', {'results':results, 'bill':{'bill_num':bill_num, 'congress':congress}})
+    return list_detail.object_list(request, queryset=results, template_object_name='document', template_name=template_name, mimetype=file_type,
+        paginate_by=10, extra_context={'title':'Congress %s, %s' % (congress, bill_num)})
     
 
-def typelist(request, doc_type, format):
+def typelist(request, doc_type, format='html'):
     results = Document.objects.filter(doc_type=DOC_TYPE_MAP[doc_type]).order_by('-release_date')
     template_name = 'public_site/list.%s' % format
     file_type = mimetypes.guess_type(template_name)[0]
