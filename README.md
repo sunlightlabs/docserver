@@ -4,12 +4,12 @@ While the <a href="http://www.youtube.com/watch?v=mEJL2Uuv-oQ">I'm just a Bill</
 
 Document Types
 --------------
-*<a href="http://jct.gov/">Joint Committee on Taxation Publications</a>
-*<a href="http://www.whitehouse.gov/omb/memoranda_default/">OMB Memos</a>
-*<a href="http://www.cbo.gov/search/ce_sitesearch.cfm">CBO Cost Estimates</a>
-*<a href="http://opencrs.com">Congressional Research Service Reports (via opencrs.com)</a>
-*<a href="http://gao.gov">GAO Reports</a>
-*<a href="http://rpc.senate.gov/public/index.cfm?FuseAction=Documents.Notices">Republican Policy Committee Legislative Notices</a>
-*<a href="http://dpc.senate.gov/dpcreports.cfm">Democratic Policy Committee Legislative Briefs</a>
-*<a href="http://repcloakroom.house.gov/news/DocumentQuery.aspx?DocumentTypeID=1501">Statements of Republican Policy</a>
-*<a href="http://www.whitehouse.gov/omb/legislative_sap_default/">White House Statements of Administration Policy</a>
+*   <a href="http://jct.gov/">Joint Committee on Taxation Publications</a>
+*   <a href="http://www.whitehouse.gov/omb/memoranda_default/">OMB Memos</a>
+*   <a href="http://www.cbo.gov/search/ce_sitesearch.cfm">CBO Cost Estimates</a>
+*   <a href="http://opencrs.com">Congressional Research Service Reports (via opencrs.com)</a>
+*   <a href="http://gao.gov">GAO Reports</a>
+*   <a href="http://rpc.senate.gov/public/index.cfm?FuseAction=Documents.Notices">Republican Policy Committee Legislative Notices</a>
+*   <a href="http://dpc.senate.gov/dpcreports.cfm">Democratic Policy Committee Legislative Briefs</a>
+*   <a href="http://repcloakroom.house.gov/news/DocumentQuery.aspx?DocumentTypeID=1501">Statements of Republican Policy</a>
+*   <a href="http://www.whitehouse.gov/omb/legislative_sap_default/">White House Statements of Administration Policy</a>
