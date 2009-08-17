@@ -24,7 +24,6 @@ def pdf_extract_text(path, original_url):
             local_file = open(path, "w")
             local_file.write(remote_file.read())
             local_file.close
-            time.sleep(2)
             pdf = pyPdf.PdfFileReader(file(path, "rb"))
 
         for i in range(0, pdf.getNumPages()):
