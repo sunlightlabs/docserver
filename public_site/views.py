@@ -1,25 +1,13 @@
+from congress_utils import *
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.core.paginator import Paginator
 from docserver.public_site.models import Document, DocumentLegislation, Vote, Action
 from django.db.models import Count
 from django.views.generic import list_detail
+import congress_utils
 import mimetypes
 import re
-
-FRIENDLY_MAP = {'hr':'H.R.', 'hres':'H.RES.', 's':'S.', 'sres':'S.R.', 'hconres':'H.CON.RES.', 
-    'sconres':'S.CON.RES', 'hjres':'H.J.RES', 'sjres':'S.J.RES.'}
-
-GT_MAP = {'hr':'h', 'hres':'hr', 's':'s', 'sres':'sr'}
-
-DOC_TYPE_MAP = {'cbo':'CBO CE', 'gao':'GAO', 'rpc':'RPC LN', 'dpc':'DPC LB', 'omb':'OMB Memo', 'srp':'RCR SRP', 'jct':'JCT', 'crs':'CRS', 'sap':'OMB SAP'}
-
-TYPE_NAME_MAP = {'cbo':'CBO Cost Estimates', 'gao':'GAO Reports',
-                    'rpc':'Republican Policy Committee Legislative Notices',
-                    'dpc':'Democratic Policy Committee Legislative Briefs',
-                    'omb':'OMB Memos', 'sap':'Statements of Administration Policy',
-                    'srp':'Statements of Republican Policy',
-                    'jct':'Joint Committee on Taxation Reports'}
                     
 RESULTS_PER_PAGE = 20
                     

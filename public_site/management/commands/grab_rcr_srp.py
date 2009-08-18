@@ -3,6 +3,7 @@ from congress_utils import *
 from docserver.public_site.models import Document, DocumentLegislation
 from django.core.management.base import NoArgsCommand
 from scrape_utils import *
+import congress_utils
 import datetime, time
 import re
 import urllib2
@@ -13,7 +14,7 @@ class Command(NoArgsCommand):
         doc_type = "RCR SRP"
         file_type = "html"
         base_url = 'http://repcloakroom.house.gov/news/'
-        page = urllib2.urlopen("http://repcloakroom.house.gov/news/DocumentQuery.aspx?DocumentTypeID=1501&Page=1")
+        page = urllib2.urlopen("http://repcloakroom.house.gov/news/DocumentQuery.aspx?DocumentTypeID=1501&Page=5")
         add_date = datetime.datetime.now()
         
         soup = BeautifulSoup(page)
@@ -46,6 +47,6 @@ class Command(NoArgsCommand):
                         doc = Document(gov_id=gov_id, release_date=release_date, add_date=add_date, title=title, description=description, doc_type=doc_type, original_url=original_url, local_file=local_file, full_text=full_text)
                         doc.save()
                         for bill in bill_list:
-                            bill_num = bill.replace(' ', '')
+                            bill_num = clean_bill_num(bill)
                             bill = DocumentLegislation(congress=congress, bill_num=bill_num, document=doc)
                             bill.save()

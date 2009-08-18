@@ -1,5 +1,30 @@
 import re
 
+FRIENDLY_MAP = {'hr':'H.R.', 'hres':'H.RES.', 's':'S.', 'sres':'S.R.', 'hconres':'H.CON.RES.', 
+    'sconres':'S.CON.RES.', 'hjres':'H.J.RES.', 'sjres':'S.J.RES.'}
+
+GT_MAP = {'hr':'h', 'hres':'hr', 's':'s', 'sres':'sr'}
+
+DOC_TYPE_MAP = {'cbo':'CBO CE', 'gao':'GAO', 'rpc':'RPC LN', 'dpc':'DPC LB', 'omb':'OMB Memo', 'srp':'RCR SRP', 'jct':'JCT', 'crs':'CRS', 'sap':'OMB SAP'}
+
+TYPE_NAME_MAP = {'cbo':'CBO Cost Estimates', 'gao':'GAO Reports',
+                    'rpc':'Republican Policy Committee Legislative Notices',
+                    'dpc':'Democratic Policy Committee Legislative Briefs',
+                    'omb':'OMB Memos', 'sap':'Statements of Administration Policy',
+                    'srp':'Statements of Republican Policy',
+                    'jct':'Joint Committee on Taxation Reports'}
+
+def clean_bill_num(bill_num, space=False):
+    bill_num = bill_num.replace(' ', '').replace('.', '').lower()
+    p = re.compile('([a-z]{1,7})(\d{1,4})')
+    m = p.match(bill_num)
+    bill_type = FRIENDLY_MAP[m.group(1)]
+    bill_num = m.group(2)
+    spacer = ''
+    if space: 
+        spacer = ' '
+    return "%s%s%s" % (bill_type, spacer, bill_num)
+    
 # return list of bill numbers extracted from string
 def extract_legislation(haystack):
     haystack = haystack.upper()
@@ -17,3 +42,5 @@ def congress_from_year(year):
 #returns session number of Congress for a provided year        
 def session_from_year(year):
     return 2 - (year % 2)
+    
+    
