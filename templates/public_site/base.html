@@ -13,7 +13,12 @@
 					<div id="titlesub2">legislative document ecosystem</div>
 				</div>
 				<div id="right">
-					{% search_box "transparency" %}
+					<div id="search_prompt">
+						<form action="/search/" method="GET">
+							<input type="text" size="50" name="q" value="{% if query %}{{query}}{% endif %}">
+							<input type="submit" value="Search">
+						</form>
+					</div>					
 				</div>
 			</div>
 		</div>

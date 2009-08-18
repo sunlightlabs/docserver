@@ -32,7 +32,7 @@ def index(request):
         link_list.append((k, TYPE_NAME_MAP[k]))
     return render_to_response('public_site/index.html', {"link_list":link_list, "doc_list":docs, "recent_list":recent})
     
-def search(request):
+def search(request, format='html'):
     if 'q' in request.GET:
         query = request.GET['q']
         document_list = Document.search.query(query)
@@ -87,6 +87,7 @@ def bill(request, congress, bill_type, bill_id, format='html'):
     results = Document.objects.filter(documentlegislation__congress=congress).filter(documentlegislation__bill_num=bill_num).order_by('-release_date')
     template_name = 'public_site/list.%s' % format
     file_type = mimetypes.guess_type(template_name)[0]
+    print file_type
     #return render_to_response('public_site/bill.html', {'results':results, 'bill':{'bill_num':bill_num, 'congress':congress}})
     return list_detail.object_list(request, queryset=results, template_object_name='document', template_name=template_name, mimetype=file_type,
         paginate_by=10, extra_context={'title':'Congress %s, %s' % (congress, bill_num)})

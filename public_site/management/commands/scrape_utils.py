@@ -33,10 +33,6 @@ def pdf_extract_text(path, original_url):
         pass
     return content
     
-def html_extract_text(path, original_url):
-    content = ""
-    return content
-    
 def debug_print(output):
     if DEBUG:
         print output
