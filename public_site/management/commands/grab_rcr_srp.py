@@ -1,9 +1,8 @@
 from BeautifulSoup import BeautifulSoup, SoupStrainer
-from congress_utils import *
+from congress_utils import extract_legislation, congress_from_year, clean_bill_num
 from docserver.public_site.models import Document, DocumentLegislation
 from django.core.management.base import NoArgsCommand
 from scrape_utils import *
-import congress_utils
 import datetime, time
 import re
 import urllib2
@@ -14,7 +13,7 @@ class Command(NoArgsCommand):
         doc_type = "RCR SRP"
         file_type = "html"
         base_url = 'http://repcloakroom.house.gov/news/'
-        page = urllib2.urlopen("http://repcloakroom.house.gov/news/DocumentQuery.aspx?DocumentTypeID=1501&Page=5")
+        page = urllib2.urlopen("http://repcloakroom.house.gov/news/DocumentQuery.aspx?DocumentTypeID=1501&Page=1")
         add_date = datetime.datetime.now()
         
         soup = BeautifulSoup(page)

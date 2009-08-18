@@ -8,9 +8,7 @@ from django.views.generic import list_detail
 import congress_utils
 import mimetypes
 import re
-                    
-RESULTS_PER_PAGE = 20
-                    
+                                        
 def index(request):
     docs =  Document.objects.all().order_by('-release_date')[:20]
     recent = DocumentLegislation.objects.top_recent(90, 30)
@@ -24,7 +22,7 @@ def search(request, format='html'):
     if 'q' in request.GET:
         query = request.GET['q']
         document_list = Document.search.query(query)
-        paginator = Paginator(document_list, RESULTS_PER_PAGE)
+        paginator = Paginator(document_list, 20)
         
         try:
             page = int(request.GET.get('page', '1'))
