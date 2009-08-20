@@ -1,24 +1,30 @@
+from BeautifulSoup import BeautifulSoup, SoupStrainer
+from congress_utils import *
+from docserver.public_site.models import Document, DocumentLegislation
 from django.core.management.base import NoArgsCommand
+from scrape_utils import *
+from time import sleep
 import datetime, time
 import urllib2
-from BeautifulSoup import BeautifulSoup
-from docserver.public_site.models import Document, DocumentLegislation
 
 class Command(NoArgsCommand):
     # grabs a session of OMB statements of administration policy and saves them to db
     # format works from 108th congress through 110th congress
     # 111th congress has new format and will not work with this script
     def handle_noargs(self, **options):
+        file_type="pdf"
         congress = 110
-        session = 1
-        url_prefix = "http://www.whitehouse.gov/omb/legislative/sap/%s-%s/" % (congress, session)
+        session = 2
+        url_prefix = "http://georgewbush-whitehouse.archives.gov/omb/legislative/sap/%s-%s/" % (congress, session)
         url = "%sindex-date.html" % url_prefix
+        print url
         doc_type = "OMB SAP"
         page = urllib2.urlopen(url)
         soup = BeautifulSoup(page)
 
     	rpts = soup.findAll('table', width='465')[1].findAll('tr')
-    	for report_row in rpts:            
+    	for report_row in rpts:       
+    	    gov_id = None     
             cols = report_row.findAll('td')
             if len(cols) > 0:
                 try:
@@ -31,6 +37,7 @@ class Command(NoArgsCommand):
                     
                 try:
                     bill_num = cols[0].find('a').string.replace('H ', 'H.').replace('HR ', 'H.R.').replace('S ', 'S.').replace('SJR ', 'S.J.Res.')
+                    bill_num = bill_num.replace(' ', '').replace('\r\n', '')
                 except:
                     bill_num = None
                     
@@ -53,17 +60,33 @@ class Command(NoArgsCommand):
                 add_date = datetime.datetime.now()
                 description = ''
                 local_file = ''
-                print bill_num
-            	                
+            
+            if gov_id:	                
                 matches = Document.objects.filter(doc_type=doc_type, gov_id=gov_id, release_date=release_date)
-                if len(matches) > 0:
-                    pass
-                else:
-                    if gov_id != None:
-                        doc = Document(gov_id=gov_id, release_date=release_date, add_date=add_date, title=title, 
-                            description=description, doc_type=doc_type, original_url=original_url, local_file=local_file)
-                        doc.save()
-                        
-                        if bill_num != None:
+                if matches:
+                    doc = matches[0]
+                    if bill_num:
+                        bill_num = clean_bill_num(bill_num)
+                        bill_dupe = DocumentLegislation.objects.filter(congress=congress).filter(bill_num=bill_num).filter(document=doc)
+                        if not bill_dupe:
                             bill = DocumentLegislation(congress=congress, bill_num=bill_num, document=doc)
                             bill.save()
+                        else: 
+                            print "bill dupe"
+                else:
+                    #local_file = archive_file(original_url, gov_id, doc_type, file_type)
+                    #time.sleep(1)   
+                    full_text = pdf_extract_text(local_file, original_url)
+                    doc = Document(gov_id=gov_id, release_date=release_date, add_date=add_date, title=title, 
+                        description=description, doc_type=doc_type, original_url=original_url, 
+                        local_file=local_file, full_text=full_text)
+                    doc.save()
+                    if bill_num:
+                        bill_num = clean_bill_num(bill_num)
+                        bill_dupe = DocumentLegislation.objects.filter(congress=congress).filter(bill_num=bill_num).filter(document=doc)
+                        if not bill_dupe:
+                            bill = DocumentLegislation(congress=congress, bill_num=bill_num, document=doc)
+                            bill.save()
+                        else: 
+                            print "bill dupe"
+                    print "added %s: %s" % (gov_id, bill_num)

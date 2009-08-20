@@ -2,10 +2,10 @@ from BeautifulSoup import BeautifulSoup, SoupStrainer
 from docserver.public_site.models import Document, DocumentLegislation
 from django.core.management.base import NoArgsCommand
 from scrape_utils import *
-from congress_utils import *
+from congress_utils import extract_legislation, clean_bill_num, congress_from_year, session_from_year
 import datetime, time
-import feedparser
 import urllib2
+import re
 
 class Command(NoArgsCommand):
     
@@ -50,7 +50,8 @@ class Command(NoArgsCommand):
                             description=description, doc_type=doc_type, original_url=original_url, 
                             local_file=local_file, full_text=full_text)
                         doc.save()
-                        for bill in bill_list:
-                            bill_num = bill.replace(' ', '')
-                            bill = DocumentLegislation(congress=congress, bill_num=bill_num, document=doc)
-                            bill.save()
+                        for bill_num in bill_list:
+                            bill_dupe = DocumentLegislation.objects.filter(congress=congress).filter(bill_num=bill_num).filter(document=doc)
+                            if not bill_dupe:
+                                bill = DocumentLegislation(congress=congress, bill_num=bill_num, document=doc)
+                                bill.save()

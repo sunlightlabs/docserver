@@ -1,7 +1,7 @@
 import re
 
 FRIENDLY_MAP = {'hr':'H.R.', 'hres':'H.RES.', 's':'S.', 'sres':'S.R.', 'hconres':'H.CON.RES.', 
-    'sconres':'S.CON.RES.', 'hjres':'H.J.RES.', 'sjres':'S.J.RES.'}
+    'sconres':'S.CON.RES.', 'hjres':'H.J.RES.', 'sjres':'S.J.RES.', 'hjr':'H.J.RES.', 'sjr':'S.J.RES.'}
 
 GT_MAP = {'hr':'h', 'hres':'hr', 's':'s', 'sres':'sr'}
 
@@ -30,6 +30,8 @@ def extract_legislation(haystack):
     haystack = haystack.upper()
     p = re.compile('S\.?\s?CON\.?\s?RES\.?\s?\d{1,5}|H\.?\s?CON\s?RES\.?\s?\d{1,5}|S\.?\s?J\.?\s?RES\.?\s\d{1,5}|H\.?\s?J\.?\s?RES\.?\s\d{1,5}|S\.?\s?RES\.?\s?\d{1,5}|H\.?\s?RES\.?\s?\d{1,5}|H\.?\s?\R\.?\s?\d{1,5}|S\.?\s?\d{1,5}')
     needle_list = p.findall(haystack)
+    for i in range(len(needle_list)):
+        needle_list[i] = clean_bill_num(needle_list[i])
     return needle_list
     
 #returns number of Congress in session for provided year
