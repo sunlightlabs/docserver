@@ -12,9 +12,9 @@ class Command(NoArgsCommand):
     def handle_noargs(self, **options):
         doc_type = "DPC LB"
         file_type = "html"
-        add_date = datetime.datetime.now()
-        year = add_date.year
+        year = 2006
         congress = congress_from_year(year)
+        add_date = datetime.datetime.now()
         url_prefix = "http://dpc.senate.gov/"
         url = "%sdpcreports.cfm?cf_year=%s" % (url_prefix, year)
         page = urllib2.urlopen(url)
@@ -30,6 +30,8 @@ class Command(NoArgsCommand):
             else:
                 gov_id = None
             original_url = "%s%s" % (url_prefix, file_name)
+            print gov_id
+            print original_url
             local_file = ''
             title = row('a')[0].string
             description = ''

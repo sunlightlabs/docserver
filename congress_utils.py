@@ -9,7 +9,7 @@ DOC_TYPE_MAP = {'cbo':'CBO CE', 'gao':'GAO', 'rpc':'RPC LN', 'dpc':'DPC LB', 'om
 
 TYPE_NAME_MAP = {'cbo':'CBO Cost Estimates', 'gao':'GAO Reports',
                     'rpc':'Republican Policy Committee Legislative Notices',
-                    'dpc':'Democratic Policy Committee Legislative Briefs',
+                    'dpc':'Democratic Policy Committee Reports and Briefs',
                     'omb':'OMB Memos', 'sap':'Statements of Administration Policy',
                     'srp':'Statements of Republican Policy',
                     'jct':'Joint Committee on Taxation Reports'}
@@ -44,5 +44,3 @@ def congress_from_year(year):
 #returns session number of Congress for a provided year        
 def session_from_year(year):
     return 2 - (year % 2)
-    
-    
