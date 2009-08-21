@@ -1,5 +1,6 @@
 from django.db import models
 from django.db import connection
+from congress_utils import GT_MAP, clean_bill_num
 import djangosphinx
 import re
     
@@ -43,11 +44,11 @@ class DocumentLegislation(models.Model):
 
     def structured_bill(self):
         if not getattr(self, '_sb', None):
-            p = re.compile('S\.\s?CON\.\s?RES\.\s?|H\.\s?CON\s?RES\.\s?|S\.\s?J\.\s?RES\.\s|H\.\s?J\.\s?RES\.\s|S\.\s?RES\.\s?|H\.\s?RES\.\s?|H\.\s?\R\.\s?|S\.\s?')
-            r = re.compile('\d{1,5}')
-            bill_type = p.findall(self.bill_num)[0].lower().replace(' ', '').replace('.', '')
-            num = r.findall(self.bill_num)[0]
-            clean = self.bill_num.upper().replace(' ', '')
+            p = re.compile('([a-z]{1,7})(\d{1,4})')
+            m = p.match(self.bill_num.replace('.', '').lower())
+            bill_type = GT_MAP[m.group(1)]
+            num = m.group(2)
+            clean = clean_bill_num(self.bill_num)
             self._sb = {'congress':self.congress, 'bill_type':bill_type, 'num':num, 'clean':clean}
         return self._sb
     

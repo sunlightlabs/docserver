@@ -3,7 +3,7 @@ import re
 FRIENDLY_MAP = {'hr':'H.R.', 'hres':'H.RES.', 's':'S.', 'sres':'S.R.', 'hconres':'H.CON.RES.', 
     'sconres':'S.CON.RES.', 'hjres':'H.J.RES.', 'sjres':'S.J.RES.', 'hjr':'H.J.RES.', 'sjr':'S.J.RES.'}
 
-GT_MAP = {'hr':'h', 'hres':'hr', 's':'s', 'sres':'sr'}
+GT_MAP = {'hr':'h', 'hres':'hr', 's':'s', 'sres':'sr', 'sjres':'sjr', 'hjres':'hjr'}
 
 DOC_TYPE_MAP = {'cbo':'CBO CE', 'gao':'GAO', 'rpc':'RPC LN', 'dpc':'DPC LB', 'omb':'OMB Memo', 'srp':'RCR SRP', 'jct':'JCT', 'crs':'CRS', 'sap':'OMB SAP'}
 
