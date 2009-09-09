@@ -46,7 +46,7 @@ class DocumentLegislation(models.Model):
         if not getattr(self, '_sb', None):
             p = re.compile('([a-z]{1,7})(\d{1,4})')
             m = p.match(self.bill_num.replace('.', '').lower())
-            bill_type = GT_MAP[m.group(1)]
+            bill_type = m.group(1)
             num = m.group(2)
             clean = clean_bill_num(self.bill_num)
             self._sb = {'congress':self.congress, 'bill_type':bill_type, 'num':num, 'clean':clean}
@@ -74,4 +74,3 @@ class Action(models.Model):
 class DocType(models.Model):
     title = models.TextField()
     description = models.TextField()
-    

@@ -21,9 +21,7 @@ class Command(NoArgsCommand):
         
         for entry in d.entries:
             title_dict = split_title(entry.title)
-            print title_dict
             gov_id = title_dict['gov_id']
-            print gov_id
             release_date = entry.updated_parsed
             release_date=datetime.datetime(release_date[0], release_date[1], release_date[2])
             add_date = datetime.datetime.now()

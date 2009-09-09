@@ -2,7 +2,7 @@ from BeautifulSoup import BeautifulSoup, SoupStrainer
 from docserver.public_site.models import Document, DocumentLegislation
 from django.core.management.base import NoArgsCommand
 from scrape_utils import *
-from congress_utils import extract_legislation, clean_bill_num, congress_from_year, session_from_year
+from congress_utils import congress_from_year, session_from_year, current_congress_session
 import datetime, time
 import urllib2
 import re
@@ -13,7 +13,8 @@ class Command(NoArgsCommand):
         doc_type = "OMB SAP"
         file_type = "pdf"
         base_url = "http://whitehouse.gov"
-        page = urllib2.urlopen("http://www.whitehouse.gov/omb/111/legislative_sap_date/")
+        current_congress = current_congress_session()['congress']
+        page = urllib2.urlopen("http://www.whitehouse.gov/omb/%s/legislative_sap_date/" % current_congress)
         add_date = datetime.datetime.now()
         
         soup = BeautifulSoup(page)
@@ -23,6 +24,7 @@ class Command(NoArgsCommand):
             cols = row.findAll('td')
             if cols:
                 bill = cols[0].find('a').string.replace('&nbsp;', ' ').replace('S ', 'S.').replace('HR ', 'H.R.').replace(' ', '')
+                print bill
                 clean_bill = bill.replace('.', '').replace(' ', '')
                 original_url = "%s%s" % (base_url, cols[0].find('a')['href'])
                 title = cols[1].contents[0].replace('&nbsp;', ' ').strip()

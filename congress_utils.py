@@ -1,4 +1,5 @@
 import re
+import datetime
 
 FRIENDLY_MAP = {'hr':'H.R.', 'hres':'H.RES.', 's':'S.', 'sres':'S.R.', 'hconres':'H.CON.RES.', 
     'sconres':'S.CON.RES.', 'hjres':'H.J.RES.', 'sjres':'S.J.RES.', 'hjr':'H.J.RES.', 'sjr':'S.J.RES.'}
@@ -7,7 +8,8 @@ GT_MAP = {'hr':'h', 'hres':'hr', 's':'s', 'sres':'sr', 'sjres':'sjr', 'hjres':'h
 
 DOC_TYPE_MAP = {'cbo':'CBO CE', 'gao':'GAO', 'rpc':'RPC LN', 'dpc':'DPC LB', 'omb':'OMB Memo', 'srp':'RCR SRP', 'jct':'JCT', 'crs':'CRS', 'sap':'OMB SAP'}
 
-TYPE_NAME_MAP = {'cbo':'CBO Cost Estimates', 'gao':'GAO Reports',
+TYPE_NAME_MAP = {'cbo':'CBO Cost Estimates', 'crs':'CRS Reports', 
+                    'gao':'GAO Reports',
                     'rpc':'Republican Policy Committee Legislative Notices',
                     'dpc':'Democratic Policy Committee Reports and Briefs',
                     'omb':'OMB Memos', 'sap':'Statements of Administration Policy',
@@ -44,3 +46,19 @@ def congress_from_year(year):
 #returns session number of Congress for a provided year        
 def session_from_year(year):
     return 2 - (year % 2)
+    
+#returns dict contaning congress number and session number for a given year
+def congress_session_from_year(year):
+    congress = congress_from_year(year)
+    session = session_from_year(year)
+    return {'congress':congress, 'session':session}
+    
+#returns dict containing congress number and session number for current year
+def current_congress_session():
+    return congress_session_from_year(datetime.datetime.now().year)
+    
+def int_to_ordinal(num):
+    if 4 <= day <= 20 or 24 <= day <= 30:
+        suffix = "th"
+    else:
+        suffix = ["st", "nd", "rd"][day % 10 - 1]
