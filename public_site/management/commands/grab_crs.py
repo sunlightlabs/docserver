@@ -14,7 +14,7 @@ class Command(NoArgsCommand):
         doc_type = "CRS"
         file_type = "pdf"
         
-        for i in range(2,50):
+        for i in range(1,50):
             print "PAGE %s" % i
             url = "http://opencrs.com/recent/feed.xml?key=%s&page=%s" % (OPEN_CRS_KEY, i)
             print url
