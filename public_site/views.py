@@ -1,7 +1,7 @@
 from congress_utils import *
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, EmptyPage, InvalidPage
 from docserver.public_site.models import Document, DocumentLegislation, Vote, Action
 from django.db.models import Count
 from django.views.generic import list_detail
