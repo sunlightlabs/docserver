@@ -1,5 +1,10 @@
 {% extends "public_site/base.html" %}
 {% load doc_extras %}
+
+{% block header %}
+  <link rel="alternate" title="Docserver RSS: {{ title }}" type="application/rss+xml" href="list.rss" />
+{% endblock %}
+
 {% block content %}
 	<h2>{{ title }} (<a href="list.rss">RSS</a>)</h2>
 	{% if document_list %}
@@ -23,4 +28,3 @@
 		<a href="list.json?page={{ page_obj.number }}">JSON</a>
 	{% endif %}
 {% endblock %}
- 
