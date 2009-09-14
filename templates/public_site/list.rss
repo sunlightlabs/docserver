@@ -3,7 +3,7 @@
   <channel>
     <title>Docserver: {{ title }}</title>
     
-    <description>Docserver feed for documents from {{ title }}</description>
+    <description>Docserver feed for {{ title }}</description>
     <language>en-us</language>
     
     
