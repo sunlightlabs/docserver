@@ -1,7 +1,12 @@
 {% extends "public_site/base.html" %}
 {% load doc_extras %}
+
+{% block header %}
+  <link rel="alternate" title="Docserver RSS: {{ title }}" type="application/rss+xml" href="list.rss" />
+{% endblock %}
+
 {% block content %}
-	<h2>{{ title }}</h2>
+	<h2>{{ title }} (<a href="list.rss">RSS</a>)</h2>
 	{% if document_list %}
 		{% generic_paginator page_obj paginator %}
 		<ul class="doc_list">
@@ -18,8 +23,8 @@
 		{% endfor %}
 		</ul>
 		{% generic_paginator page_obj paginator %}
+    
 		<a href="list.xml?page={{ page_obj.number }}">XML</a>
 		<a href="list.json?page={{ page_obj.number }}">JSON</a>
 	{% endif %}
 {% endblock %}
- 

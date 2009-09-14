@@ -27,13 +27,13 @@ class Document(models.Model):
     original_url = models.CharField(max_length=255)
     local_file = models.CharField(max_length=255)
     full_text = models.TextField()
-    search = djangosphinx.SphinxSearch( 
+    search = djangosphinx.SphinxSearch(
         index='docserver', 
         weights = {
             'title':100,
             'description':20,
             'full_text':10,
-        }                                        
+        }
     )
     
 class DocumentLegislation(models.Model):
