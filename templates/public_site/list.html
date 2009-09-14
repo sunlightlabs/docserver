@@ -18,6 +18,7 @@
 		{% endfor %}
 		</ul>
 		{% generic_paginator page_obj paginator %}
+    <a href="list.rss?page={{ page_obj.number }}">RSS</a>
 		<a href="list.xml?page={{ page_obj.number }}">XML</a>
 		<a href="list.json?page={{ page_obj.number }}">JSON</a>
 	{% endif %}
