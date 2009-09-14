@@ -8,6 +8,8 @@ from django.views.generic import list_detail
 import congress_utils
 import mimetypes
 import re
+
+from utils import *
                                         
 def index(request):
     docs =  Document.objects.all().order_by('-release_date')[:20]
@@ -70,13 +72,14 @@ def timeline(request, congress, bill_type, bill_id):
 
 def bill(request, congress, bill_type, bill_id, format='html'):
     bill_num = "%s%s" % (FRIENDLY_MAP[bill_type], bill_id)
+    bill_identifier = "%s-%s-%s" % (congress, bill_type, bill_id)
     results = Document.objects.filter(documentlegislation__congress=congress).filter(documentlegislation__bill_num=bill_num).order_by('-release_date')
     template_name = 'public_site/list.%s' % format
     file_type = mimetypes.guess_type(template_name)[0]
     print file_type
     #return render_to_response('public_site/bill.html', {'results':results, 'bill':{'bill_num':bill_num, 'congress':congress}})
     return list_detail.object_list(request, queryset=results, template_object_name='document', template_name=template_name, mimetype=file_type,
-        paginate_by=10, extra_context={'title':'Congress %s, %s' % (congress, bill_num)})
+        paginate_by=10, extra_context={'title':'Congress %s, %s' % (congress, bill_num), 'site': current_site(request), 'path': "bill/%s" % bill_identifier})
     
 
 def typelist(request, doc_type, format='html'):
@@ -84,4 +87,4 @@ def typelist(request, doc_type, format='html'):
     template_name = 'public_site/list.%s' % format
     file_type = mimetypes.guess_type(template_name)[0]
     return list_detail.object_list(request, queryset=results, template_object_name='document', template_name=template_name, mimetype=file_type,
-        paginate_by=10, extra_context={'title':TYPE_NAME_MAP[doc_type]})
+        paginate_by=10, extra_context={'title':TYPE_NAME_MAP[doc_type], 'site':current_site(request), 'path': doc_type})

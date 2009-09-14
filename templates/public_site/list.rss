@@ -2,10 +2,10 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Docserver: {{ title }}</title>
-    
+    <link>http://{{ site.domain }}/{{ path }}/</link>
     <description>Docserver feed for {{ title }}</description>
     <language>en-us</language>
-    
+    <atom:link href="http://{{ site.domain }}/{{ path }}/list.rss" rel="self" type="application/rss+xml" />
     
     {% for document in document_list %}
       <item>
