@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Docserver: {{ title }}</title>
+    
+    <description>Docserver feed for documents from {{ title }}</description>
+    <language>en-us</language>
+    
+    
+    {% for document in document_list %}
+      <item>
+        <title>{{ document.title }}</title>
+        <description>{{ document.title }}</description>
+        <link>{{ document.original_url }}</link>
+        <guid>{{ document.original_url }}</guid>
+        <pubDate>{{ document.release_date|date:"D, d M Y H:i:s T" }}</pubDate>
+      </item>
+    {% endfor %}
+  </channel>
+</rss>
