@@ -1,6 +1,6 @@
 # Django settings for docserver project.
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 force_script_name=""
