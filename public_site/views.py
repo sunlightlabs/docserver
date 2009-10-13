@@ -10,6 +10,15 @@ import mimetypes
 import re
 
 from utils import *
+
+def get_mime(format):
+    if format=="json":
+        mime_type = 'application/json'
+    elif format=="xml":
+        mime_type = 'text/xml'
+    else:
+        mime_type = 'text/html'
+    return mime_type
                                         
 def index(request):
     docs =  Document.objects.all().order_by('-release_date')[:20]
@@ -39,7 +48,7 @@ def search(request, format='html'):
         query = None
         documents = None
         
-    return render_to_response('public_site/search.html', {'results':documents, 'query':query})
+    return render_to_response('public_site/search.html', {'results':documents, 'query':query}, mimetype=get_mime(format))
 
 def timeline(request, congress, bill_type, bill_id):
     timeline = {}
@@ -75,9 +84,7 @@ def bill(request, congress, bill_type, bill_id, format='html'):
     bill_identifier = "%s-%s-%s" % (congress, bill_type, bill_id)
     results = Document.objects.filter(documentlegislation__congress=congress).filter(documentlegislation__bill_num=bill_num).order_by('-release_date')
     template_name = 'public_site/list.%s' % format
-    file_type = mimetypes.guess_type(template_name)[0]
-    print file_type
-    #return render_to_response('public_site/bill.html', {'results':results, 'bill':{'bill_num':bill_num, 'congress':congress}})
+    file_type = get_mime(format)
     return list_detail.object_list(request, queryset=results, template_object_name='document', template_name=template_name, mimetype=file_type,
         paginate_by=10, extra_context={'title':'Congress %s, %s' % (congress, bill_num), 'site': current_site(request), 'path': "bill/%s" % bill_identifier})
     
@@ -85,6 +92,6 @@ def bill(request, congress, bill_type, bill_id, format='html'):
 def typelist(request, doc_type, format='html'):
     results = Document.objects.filter(doc_type=DOC_TYPE_MAP[doc_type]).order_by('-release_date')
     template_name = 'public_site/list.%s' % format
-    file_type = mimetypes.guess_type(template_name)[0]
+    file_type = get_mime(format)
     return list_detail.object_list(request, queryset=results, template_object_name='document', template_name=template_name, mimetype=file_type,
         paginate_by=10, extra_context={'title':TYPE_NAME_MAP[doc_type], 'site':current_site(request), 'path': doc_type})
