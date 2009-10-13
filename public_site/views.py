@@ -21,7 +21,7 @@ def get_mime(format):
     return mime_type
                                         
 def index(request):
-    docs =  Document.objects.all().order_by('-release_date')[:20]
+    docs =  Document.objects.defer("full_text").order_by('-release_date')[:20]
     link_list = []
     for k in TYPE_NAME_MAP:
         link_list.append((k, TYPE_NAME_MAP[k]))
@@ -55,7 +55,7 @@ def timeline(request, congress, bill_type, bill_id):
     bill_num = "%s%s" % (FRIENDLY_MAP[bill_type], bill_id)
     gt_num = "%s%s" % (GT_MAP[bill_type], bill_id)
 
-    docs = DocumentLegislation.objects.filter(congress=congress)\
+    docs = DocumentLegislation.objects.defer("full_text").filter(congress=congress)\
         .filter(bill_num=bill_num).order_by('document__release_date')
     for doc in docs:
         timeline[doc.document.release_date] = {'type':'Document', 'title':doc.document.title}
