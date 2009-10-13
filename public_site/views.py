@@ -22,12 +22,10 @@ def get_mime(format):
                                         
 def index(request):
     docs =  Document.objects.all().order_by('-release_date')[:20]
-    recent = DocumentLegislation.objects.top_recent(90, 30)
-    new_recent = DocumentLegislation.objects.aggregate(doc_count=Count('document', distinct=True))
     link_list = []
     for k in TYPE_NAME_MAP:
         link_list.append((k, TYPE_NAME_MAP[k]))
-    return render_to_response('public_site/index.html', {"link_list":link_list, "doc_list":docs, "recent_list":recent})
+    return render_to_response('public_site/index.html', {"link_list":link_list, "doc_list":docs})
     
 def search(request, format='html'):
     if 'q' in request.GET:
