@@ -16,7 +16,7 @@ class Command(NoArgsCommand):
     def handle_noargs(self, **options):
         doc_type = "CBO CE"
         file_type = "pdf"
-        d = feedparser.parse("http://www.cbo.gov/rss/costestimates.xml")
+        d = feedparser.parse("http://www.cbo.gov/rss/latest10.xml")
         
         for entry in d.entries:
             title_dict = split_title(entry.title)

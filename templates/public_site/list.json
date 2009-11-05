@@ -6,6 +6,7 @@
 		"doc_list": [
 		{% for document in document_list %}
 			{
+			    "id":"{{ document.gov_id }}",
 				"document_type":"{{ document.doc_type }}",
 				"title":"{{ document.title }}", 
 				"release_date":"{{ document.release_date }}", 
