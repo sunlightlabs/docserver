@@ -4,6 +4,7 @@ from django.shortcuts import render_to_response
 from django.core.paginator import Paginator, EmptyPage, InvalidPage
 from docserver.public_site.models import Document, DocumentLegislation, Vote, Action
 from django.db.models import Count
+from django.views.decorators.cache import cache_page
 from django.views.generic import list_detail
 import congress_utils
 import mimetypes
@@ -19,14 +20,16 @@ def get_mime(format):
     else:
         mime_type = 'text/html'
     return mime_type
-                                        
+
+@cache_page(60 * 60)              
 def index(request):
     docs =  Document.objects.defer("full_text").order_by('-release_date')[:20]
     link_list = []
     for k in TYPE_NAME_MAP:
         link_list.append((k, TYPE_NAME_MAP[k]))
     return render_to_response('public_site/index.html', {"link_list":link_list, "doc_list":docs})
-    
+
+@cache_page(60*60)
 def search(request, format='html'):
     if 'q' in request.GET:
         query = request.GET['q']
@@ -48,6 +51,7 @@ def search(request, format='html'):
         
     return render_to_response('public_site/search.html', {'results':documents, 'query':query}, mimetype=get_mime(format))
 
+@cache_page(60 * 60)
 def timeline(request, congress, bill_type, bill_id):
     timeline = {}
     timeline_list = []
@@ -76,7 +80,7 @@ def timeline(request, congress, bill_type, bill_id):
     return render_to_response('public_site/timeline.html', 
         {'bill_num':bill_num, 'congress':congress, 'timeline':timeline_list})
     
-
+@cache_page(60 * 60)
 def bill(request, congress, bill_type, bill_id, format='html'):
     bill_num = "%s%s" % (FRIENDLY_MAP[bill_type], bill_id)
     bill_identifier = "%s-%s-%s" % (congress, bill_type, bill_id)
@@ -86,7 +90,7 @@ def bill(request, congress, bill_type, bill_id, format='html'):
     return list_detail.object_list(request, queryset=results, template_object_name='document', template_name=template_name, mimetype=file_type,
         paginate_by=10, extra_context={'title':'Congress %s, %s' % (congress, bill_num), 'site': current_site(request), 'path': "bill/%s" % bill_identifier})
     
-
+@cache_page(60 * 60)
 def typelist(request, doc_type, format='html'):
     results = Document.objects.defer("full_text").filter(doc_type=DOC_TYPE_MAP[doc_type]).order_by('-release_date')
     template_name = 'public_site/list.%s' % format

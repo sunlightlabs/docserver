@@ -1,11 +1,16 @@
 import os
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 
+DEBUG = False
+TEMPLATE_DEBUG = DEBUG
+
 ADMINS = (
     #('Name', 'email address'),
 )
 
 MANAGERS = ADMINS
+
+CACHE_BACKEND = 'memcached://127.0.0.1:11211/'
 
 DATABASE_ENGINE = ''
 DATABASE_NAME = ''
