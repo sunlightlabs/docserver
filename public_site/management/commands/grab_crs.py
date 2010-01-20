@@ -15,9 +15,7 @@ class Command(NoArgsCommand):
         file_type = "pdf"
         
         for i in range(1,2):
-            #print "PAGE %s" % i
             url = "http://opencrs.com/api/reports/list.xml?key=%s&page=%s" % (OPEN_CRS_KEY, i)
-            #print url
             page = urllib2.urlopen(url)
             soup = BeautifulStoneSoup(page)
             for document in soup.response.findAll('resource'):
@@ -31,14 +29,12 @@ class Command(NoArgsCommand):
                 try:
                     matches = Document.objects.filter(doc_type=doc_type, gov_id=gov_id, release_date=release_date)
                     if not matches:
-                        #print "new"
                         if gov_id:
                             local_file = archive_file(original_url, gov_id, doc_type, file_type)
                             full_text = pdf_extract_text(local_file, original_url)
                             doc = Document(gov_id=gov_id, release_date=release_date, add_date=add_date, title=title, 
-                                description=description, doc_type=doc_type, original_url=download_url, 
+                                description=description, doc_type=doc_type, original_url=original_url, 
                                 local_file=local_file, full_text=full_text)
-                            print doc
                             doc.save()
                     else:
                         pass
