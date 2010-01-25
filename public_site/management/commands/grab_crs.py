@@ -40,4 +40,3 @@ class Command(NoArgsCommand):
                         pass
                 except:
                     pass
-                print gov_id
