@@ -1,0 +1,6 @@
+Django
+simplejson
+feedparser
+python-memcached
+BeautifulSoup==3.0.8
+django-sphinx
