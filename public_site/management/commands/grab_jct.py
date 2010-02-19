@@ -1,5 +1,5 @@
 from BeautifulSoup import BeautifulSoup, SoupStrainer
-from congress_utils import *
+from public_site.congress_utils import *
 from docserver.public_site.models import Document, DocumentLegislation
 from django.core.management.base import NoArgsCommand
 from scrape_utils import *

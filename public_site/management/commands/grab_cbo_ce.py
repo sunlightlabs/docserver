@@ -1,4 +1,4 @@
-from congress_utils import extract_legislation, congress_from_year, clean_bill_num
+from public_site.congress_utils import extract_legislation, congress_from_year, clean_bill_num
 from django.core.management.base import NoArgsCommand
 from docserver.public_site.models import Document, DocumentLegislation
 from scrape_utils import *

@@ -1,5 +1,5 @@
 from BeautifulSoup import BeautifulSoup
-from congress_utils import extract_legislation, congress_from_year
+from public_site.congress_utils import extract_legislation, congress_from_year
 from django.core.management.base import NoArgsCommand
 from docserver.public_site.models import Document, DocumentLegislation
 from scrape_utils import archive_file
