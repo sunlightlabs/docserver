@@ -16,7 +16,7 @@ class Command(NoArgsCommand):
         year = add_date.year
         congress = congress_from_year(year)
         url_prefix = "http://dpc.senate.gov/"
-        url = "%sdpcreports.cfm?cf_year=%s" % (url_prefix, year)
+        url = "%sdpcreports.cfm?cf_year=%s&doctype=lb" % (url_prefix, year)
         page = urllib2.urlopen(url)
         soup = BeautifulSoup(page)
         

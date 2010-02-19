@@ -24,7 +24,6 @@ class Command(NoArgsCommand):
             cols = row.findAll('td')
             if cols:
                 bill = cols[0].find('a').string.replace('&nbsp;', ' ').replace('S ', 'S.').replace('HR ', 'H.R.').replace(' ', '')
-                print bill
                 clean_bill = bill.replace('.', '').replace(' ', '')
                 original_url = "%s%s" % (base_url, cols[0].find('a')['href'])
                 title = cols[1].contents[0].replace('&nbsp;', ' ').strip()
