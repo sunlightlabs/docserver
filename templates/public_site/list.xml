@@ -1,0 +1,17 @@
+<xml>
+	<documents title="{{ title }}" page_num="{{ page_obj.number }}" max_pages="{{ paginator.num_pages }}">
+	{% for document in document_list %}
+		<document type="{{ document.doc_type }}">
+			<title>{{ document.title }}</title>
+			<release_date>{{ document.release_date }}</release_date>
+			<original_url>{{ document.original_url }}</original_url>
+			<archive_url></archive_url>
+			<legislation>
+			{% for bill in document.documentlegislation_set.all  %}
+				<bill congress="{{ bill.congress }}" bill_num="{{ bill.bill_num }}" />
+			{% endfor %}
+			</legislation>
+		</document>
+	{% endfor %}
+	</documents>	
+</xml>

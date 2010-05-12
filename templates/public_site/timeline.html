@@ -1,0 +1,9 @@
+{% extends "public_site/base.html" %}
+{% block content %}
+	{{ bill_num }}
+	<ul>
+	{% for item in timeline %}
+		<li>{{ item.date }}: {{ item.item.type }}: {{ item.item.description }}</li>
+	{% endfor %}
+	</ul>
+{% endblock %}
