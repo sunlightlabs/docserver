@@ -2,11 +2,7 @@ from congress_utils import *
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.core.paginator import Paginator, EmptyPage, InvalidPage
-<<<<<<< HEAD:public_site/views.py
 from public_site.models import Document, DocumentLegislation, Vote, Action
-=======
-from docserver.public_site.models import Document, DocumentLegislation, Vote, Action
->>>>>>> 22ccb1950febf3a0f37005b53b1c7bcc5f5dee03:public_site/views.py
 from django.db.models import Count
 from django.views.decorators.cache import cache_page
 from django.views.generic import list_detail
@@ -96,19 +92,12 @@ def bill(request, congress, bill_type, bill_id, format='html'):
     
 @cache_page(60 * 60)
 def typelist(request, doc_type, format='html'):
-<<<<<<< HEAD:public_site/views.py
     if "callback" in request.GET:
         callback = request.GET['callback']
     else:
         callback = None
-=======
->>>>>>> 22ccb1950febf3a0f37005b53b1c7bcc5f5dee03:public_site/views.py
     results = Document.objects.defer("full_text").filter(doc_type=DOC_TYPE_MAP[doc_type]).order_by('-release_date')
     template_name = 'public_site/list.%s' % format
     file_type = get_mime(format)
     return list_detail.object_list(request, queryset=results, template_object_name='document', template_name=template_name, mimetype=file_type,
-<<<<<<< HEAD:public_site/views.py
         paginate_by=10, extra_context={'title':TYPE_NAME_MAP[doc_type], 'site':current_site(request), 'path': doc_type, 'callback':callback})
-=======
-        paginate_by=10, extra_context={'title':TYPE_NAME_MAP[doc_type], 'site':current_site(request), 'path': doc_type})
->>>>>>> 22ccb1950febf3a0f37005b53b1c7bcc5f5dee03:public_site/views.py

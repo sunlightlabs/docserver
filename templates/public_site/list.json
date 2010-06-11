@@ -1,9 +1,6 @@
-<<<<<<< HEAD:templates/public_site/list.json
 {% if callback %}
 {{ callback }}(
 {% endif %}
-=======
->>>>>>> 22ccb1950febf3a0f37005b53b1c7bcc5f5dee03:templates/public_site/list.json
 [
 	{
 		"title":"{{ title }}",
@@ -30,9 +27,6 @@
 		]
 	}
 ]
-<<<<<<< HEAD:templates/public_site/list.json
 {% if callback %}
 )
 {% endif %}
-=======
->>>>>>> 22ccb1950febf3a0f37005b53b1c7bcc5f5dee03:templates/public_site/list.json
