@@ -40,3 +40,4 @@ class Command(NoArgsCommand):
                         pass
                 except:
                     pass
+
