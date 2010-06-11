@@ -1,5 +1,5 @@
 from django.core.management.base import NoArgsCommand
-from docserver.public_site.models import Document
+from public_site.models import Document
 from scrape_utils import *
 import datetime, time
 import feedparser

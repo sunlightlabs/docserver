@@ -1,5 +1,5 @@
 from BeautifulSoup import BeautifulSoup, SoupStrainer
-from docserver.public_site.models import Document, DocumentLegislation
+from public_site.models import Document, DocumentLegislation
 from django.core.management.base import NoArgsCommand
 from scrape_utils import *
 from congress_utils import congress_from_year, session_from_year, current_congress_session

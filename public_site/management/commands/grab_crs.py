@@ -1,5 +1,5 @@
 from BeautifulSoup import BeautifulStoneSoup
-from docserver.public_site.models import Document, DocumentLegislation
+from public_site.models import Document, DocumentLegislation
 from django.core.management.base import NoArgsCommand
 from django import db
 from scrape_utils import *

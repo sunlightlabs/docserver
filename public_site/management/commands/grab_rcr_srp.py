@@ -1,6 +1,6 @@
 from BeautifulSoup import BeautifulSoup, SoupStrainer
 from congress_utils import extract_legislation, congress_from_year, clean_bill_num
-from docserver.public_site.models import Document, DocumentLegislation
+from public_site.models import Document, DocumentLegislation
 from django.core.management.base import NoArgsCommand
 from scrape_utils import *
 import datetime, time

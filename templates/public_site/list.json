@@ -1,3 +1,6 @@
+{% if callback %}
+{{ callback }}(
+{% endif %}
 [
 	{
 		"title":"{{ title }}",
@@ -24,3 +27,6 @@
 		]
 	}
 ]
+{% if callback %}
+)
+{% endif %}
