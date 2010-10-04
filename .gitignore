@@ -2,7 +2,4 @@ apache/
 local_settings.py
 *.pyc
 .DS_Store
-<<<<<<< HEAD:.gitignore
 .git-old/
-=======
->>>>>>> 22ccb1950febf3a0f37005b53b1c7bcc5f5dee03:.gitignore
