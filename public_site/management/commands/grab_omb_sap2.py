@@ -27,7 +27,7 @@ class Command(NoArgsCommand):
                 clean_bill = bill.replace('.', '').replace(' ', '')
                 original_url = "%s%s" % (base_url, cols[0].find('a')['href'])
                 title = cols[1].contents[0].replace('&nbsp;', ' ').strip()
-                date_str = cols[2].string.replace('&nbsp;', ' ')
+                date_str = cols[2].string.replace('&nbsp;', ' ').strip()
                 try:
                     release_date = time.strftime('%Y-%m-%d', time.strptime(date_str, '%B %d, %Y'))
                 except:
