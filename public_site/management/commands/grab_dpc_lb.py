@@ -42,13 +42,7 @@ class Command(NoArgsCommand):
                 if gov_id:
                     local_file = archive_file(original_url, gov_id, doc_type, file_type)
                     time.sleep(2)
-                    print_page = urllib2.urlopen('file://%s' % local_file).read()
-                    soup = BeautifulSoup(print_page)
-                    try:
-                        full_text = ''.join(soup.findAll('body')[1].findAll(text=True)).strip()
-                        full_text = re.sub("\s+" , " ", full_text).replace('&nbsp;', '')
-                    except:
-                        full_text = ''
+                    full_text = None
                     doc = Document(gov_id=gov_id, release_date=release_date, add_date=add_date, title=title, 
                         description=description, doc_type=doc_type, original_url=original_url, 
                         local_file=local_file, full_text=full_text)

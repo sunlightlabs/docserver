@@ -38,9 +38,10 @@ class Command(NoArgsCommand):
 
                 if len(matches) == 0:
                     print_url = original_url.replace('DocumentSingle', 'DocumentPrint')
-                    print_page = urllib2.urlopen(print_url).read()
-                    full_text = ''.join(BeautifulSoup(print_page).findAll(text=True)).replace('DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"', '').strip()
-                    full_text = re.sub("\s+" , " ", full_text)
+                    #print_page = urllib2.urlopen(print_url).read()
+                    #full_text = ''.join(BeautifulSoup(print_page).findAll(text=True)).replace('DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"', '').strip()
+                    #full_text = re.sub("\s+" , " ", full_text)
+                    full_text = None
                     if gov_id:
                         local_file = archive_file(print_url, gov_id, doc_type, file_type)
                         doc = Document(gov_id=gov_id, release_date=release_date, add_date=add_date, title=title, description=description, doc_type=doc_type, original_url=original_url, local_file=local_file, full_text=full_text)
