@@ -12,7 +12,7 @@ class Command(NoArgsCommand):
         doc_type = "JCT"
         file_type = "pdf"
         base_url = "http://jct.gov"
-        page = urllib2.urlopen("http://www.jct.gov/publications.html?func=select&id=50")
+        page = urllib2.urlopen("http://www.jct.gov/publications.html?func=select&id=48")
         add_date = datetime.datetime.now()
         
         soup = BeautifulSoup(page)

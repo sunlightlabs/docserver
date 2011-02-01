@@ -25,8 +25,8 @@ class Document(models.Model):
     description = models.TextField()
     doc_type = models.CharField(max_length=32)
     original_url = models.CharField(max_length=255)
-    local_file = models.CharField(max_length=255)
-    full_text = models.TextField()
+    local_file = models.CharField(max_length=255, null=True)
+    full_text = models.TextField(null=True)
     search = djangosphinx.SphinxSearch(
         index='docserver', 
         weights = {

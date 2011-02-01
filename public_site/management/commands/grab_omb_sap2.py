@@ -14,7 +14,7 @@ class Command(NoArgsCommand):
         file_type = "pdf"
         base_url = "http://whitehouse.gov"
         current_congress = current_congress_session()['congress']
-        page = urllib2.urlopen("http://www.whitehouse.gov/omb/%s/legislative_sap_date/" % current_congress)
+        page = urllib2.urlopen("http://www.whitehouse.gov/omb/%s/legislative_sap_date_%s" % (current_congress, datetime.datetime.now().year))
         add_date = datetime.datetime.now()
         
         soup = BeautifulSoup(page)
@@ -35,11 +35,11 @@ class Command(NoArgsCommand):
                 year = time.strptime(date_str, '%B %d, %Y')[0]
                 congress = congress_from_year(year)
                 session = session_from_year(year)
-                recipient = cols[3].string
+                recipient = cols[3].string.strip().replace('&nbsp;', ' ')
                 bill_list = [bill]
                 description = ""
                 local_file = ""
-                suffix = recipient[0]
+                suffix = release_date
                 gov_id = "%s-%s-SAP%s-%s" % (congress, session, clean_bill, suffix)
                 
                 matches = Document.objects.filter(doc_type=doc_type, gov_id=gov_id, release_date=release_date)
