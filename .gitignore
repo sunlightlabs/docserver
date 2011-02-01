@@ -1,5 +1,6 @@
 apache/
 local_settings.py
 *.pyc
+public_site/management/commands/*.pyc
 .DS_Store
 .git-old/
