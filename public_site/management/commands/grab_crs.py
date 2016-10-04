@@ -3,6 +3,7 @@ from public_site.models import Document, DocumentLegislation
 from django.core.management.base import NoArgsCommand
 from django import db
 from scrape_utils import *
+from settings import *
 import datetime
 import urllib2
 
@@ -10,7 +11,6 @@ class Command(NoArgsCommand):
     
     def handle_noargs(self, **options):
         add_date=datetime.datetime.now()
-        OPEN_CRS_KEY = '***REMOVED***'
         doc_type = "CRS"
         file_type = "pdf"
         
